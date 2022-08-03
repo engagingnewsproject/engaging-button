@@ -86,18 +86,19 @@ function enp_update_button_count() {
     $btn_type = $_REQUEST['type']; // post or comment? We don't need the specific post type
     $operator = $_REQUEST['operator'];
     $user_id = $_REQUEST['user_id'];
+    $incoming_nonce = $_REQUEST['nonce'];
 
-    enp_process_update_button_count($pid, $btn_slug, $btn_type, $operator, $user_id);
+    enp_process_update_button_count($pid, $btn_slug, $btn_type, $operator, $user_id, $incoming_nonce);
 }
 
 
 
-function enp_process_update_button_count($pid, $btn_slug, $btn_type, $operator, $user_id) {
+function enp_process_update_button_count($pid, $btn_slug, $btn_type, $operator, $user_id, $incoming_nonce) {
     // Instantiate WP_Ajax_Response
     $response = new WP_Ajax_Response;
 
     // Verify Nonces
-    if(wp_verify_nonce( $_REQUEST['nonce'], 'enp_button_'.$btn_type.'_'.$btn_slug.'_' . $pid )) {
+    if(wp_verify_nonce( $incoming_nonce, 'enp_button_'.$btn_type.'_'.$btn_slug.'_' . $pid )) {
         global $wpdb;
 
         if($btn_type === 'post') {
